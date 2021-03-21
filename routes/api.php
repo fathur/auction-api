@@ -22,12 +22,20 @@ Route::post('login', [
     \App\Http\Controllers\AuthenticationController::class, 'login'
 ])->name('auth.login');
 
-Route::delete('logout', [
-    \App\Http\Controllers\AuthenticationController::class, 'logout'
-])->name('auth.logout');
+Route::middleware('auth.jwt')->group(function() {
 
-Route::get('items', [\App\Http\Controllers\ItemController::class, 'index'])
-    ->name('items.index');
+    Route::delete('logout', [
+        \App\Http\Controllers\AuthenticationController::class, 'logout'
+    ])->name('auth.logout');
+    
+    Route::get('items', [\App\Http\Controllers\ItemController::class, 'index'])
+        ->name('items.index');
+    
+    Route::get('items/{item}', [\App\Http\Controllers\ItemController::class, 'show'])
+        ->name('items.show');
 
-Route::get('items/{item}', [\App\Http\Controllers\ItemController::class, 'show'])
-    ->name('items.show');
+    Route::post('items/{item}/bids', [
+        \App\Http\Controllers\BidController::class, 'store'
+    ])->name('bids.store');
+});
+

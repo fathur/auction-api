@@ -16,9 +16,10 @@ class CreatePreferencesTable extends Migration
         Schema::create('preferences', function (Blueprint $table) {
             $table->id();
             
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->cascadeOnUpdate()->cascadeOnDelete();
+            // $table->foreignId('user_id')
+            //     ->constrained('users')
+            //     ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('username');
 
             $table->string('key');
             
@@ -26,7 +27,11 @@ class CreatePreferencesTable extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user_id', 'key']);
+            $table->unique([
+                // 'user_id', 
+                'username',
+                'key'
+            ]);
         });
     }
 

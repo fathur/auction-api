@@ -21,7 +21,9 @@ class AuthenticationController extends Controller
         $username = $request->get('username');
         $password = $request->get('password');
 
-        $token = auth()->attempt([
+        $token = auth()->claims([
+            'usr' => $username
+        ])->attempt([
             'username'  => $username,
             'password'  => $password
         ]);

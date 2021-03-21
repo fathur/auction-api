@@ -14,7 +14,10 @@ class BidObserver
      */
     public function created(Bid $bid)
     {
-        //
+        $item = $bid->item;
+        $item->highest_bidder_username = auth()->user()->username;
+        $item->highest_bid_price = $bid->price;
+        $item->save();
     }
 
     /**

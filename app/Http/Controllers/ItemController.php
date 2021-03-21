@@ -29,8 +29,9 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show(Item $item, Request $request)
     {
+
         return response()->json(
             fractal($item, new ItemTransformer())->toArray()
         );

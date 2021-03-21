@@ -20,12 +20,14 @@ class CreateItemsTable extends Migration
             $table->datetime('expiry_at');
             $table->string('image_url')->nullable();
 
-            $table->foreignId('highest_bidder_id')
-                ->nullable()
-                ->constrained('users')
-                ->cascadeOnDelete()->cascadeOnUpdate();
+            // $table->foreignId('highest_bidder_id')
+            //     ->nullable()
+            //     ->constrained('users')
+            //     ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('highest_bidder_username')->nullable();
 
-            $table->unsignedInteger('highest_bid')->nullable();
+            $table->unsignedInteger('highest_bid_price')->nullable();
+            $table->unsignedInteger('initial_price')->nullable();
 
             $table->timestamps();
         });

@@ -22,16 +22,23 @@ class CreateBidsTable extends Migration
 
             $table->unsignedInteger('nominal');
 
+            // Bidder not using foreign id
+            // But using hardcoded username
+            // for interview requirements.
+            /* 
             $table->foreignId('bidder_id')
                 ->constrained('users')
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            */
+            $table->string('username');
 
             $table->timestamps();
 
             $table->unique([
                 'item_id',
                 'nominal',
-                'bidder_id'
+                // 'bidder_id'
+                'username'
             ]);
         });
     }
