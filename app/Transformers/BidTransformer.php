@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use App\Models\Bid;
 
 class BidTransformer extends TransformerAbstract
 {
@@ -29,10 +30,12 @@ class BidTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform()
+    public function transform(Bid $bid)
     {
         return [
-            //
+            'id' => $bid->id,
+            'nominal' => $bid->nominal,
+            'username' => $bid->username
         ];
     }
 }

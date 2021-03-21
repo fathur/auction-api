@@ -10,6 +10,13 @@ class Item extends Model
     use HasFactory;
 
     protected $casts = [
-        'expiry_at' => 'datetime'
+        'expiry_at' => 'datetime',
+        'initial_price' => 'integer',
+        'highest_bid_price' => 'integer',
     ];
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class);
+    }
 }

@@ -13,9 +13,23 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::paginate(10);
+        $query = Item::query();
+
+        if ($request->has('q')) {
+            $q = strtolower($request->get('q'));
+            $query = $query->where(function($query) use ($q) {
+                $query->whereRaw("LOWER(name) LIKE '%{$q}%'")
+                    ->orWhereRaw("LOWER(description) LIKE '%{$q}%'");
+            }); 
+        }
+
+        if ($request->has('sort_dir')) {
+            $query = $query->orderBy('highest_bid_price', $request->get('sort_dir'));
+        }
+
+        $items = $query->paginate(10);
 
         return response()->json(
             fractal($items, new ItemTransformer())->toArray()

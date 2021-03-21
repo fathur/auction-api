@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Bid;
 use App\Models\Item;
 use App\Transformers\BidTransformer;
+use App\Http\Requests\BidRequest;
+use Exception;
+use Illuminate\Validation\ValidationException;
 
 class BidController extends Controller
 {
@@ -25,10 +28,21 @@ class BidController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Item $item)
+    public function store(BidRequest $request, Item $item)
     {
-        $bid = $item->bids()->create([
+        $authUsername = auth()->payload()->get('usr');
 
+        if ($authUsername == $item->highest_bidder_username) {
+            throw ValidationException::withMessages(['username' => 'You already the highest bidder.']);
+        }
+
+        if ($item->expiry_at->lt(now())) {
+            throw ValidationException::withMessages(['created_at' => 'Your bid is expired.']);
+        }
+
+        $bid = $item->bids()->create([
+            'nominal'   => $request->get('nominal'),
+            'username'  => $authUsername
         ]);
 
         return response()->json(
