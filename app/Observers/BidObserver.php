@@ -3,6 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Bid;
+use App\Models\Preference;
+use App\Models\ItemUser;
+use App\Extensions\Bid as BidService;
+use App\Jobs\AutoBid;
 
 class BidObserver
 {
@@ -14,10 +18,10 @@ class BidObserver
      */
     public function created(Bid $bid)
     {
-        $item = $bid->item;
-        $item->highest_bidder_username = $bid->username;
-        $item->highest_bid_price = $bid->nominal;
-        $item->save();
+        \Log::info('observer created');
+        self::setHighestBid($bid);
+
+        $this->fillAutoBid($bid);
     }
 
     /**
@@ -28,7 +32,7 @@ class BidObserver
      */
     public function updated(Bid $bid)
     {
-        //
+        
     }
 
     /**
@@ -62,5 +66,18 @@ class BidObserver
     public function forceDeleted(Bid $bid)
     {
         //
+    }
+
+    public static function setHighestBid(Bid $bid)
+    {
+        $item = $bid->item;
+        $item->highest_bidder_username = $bid->username;
+        $item->highest_bid_price = $bid->nominal;
+        $item->save();
+    }
+
+    public function fillAutoBid(Bid $bid)
+    {
+        AutoBid::dispatch(auth()->payload()->get('usr'), $bid);
     }
 }

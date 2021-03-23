@@ -17,10 +17,11 @@ class Bid extends Model
         'nominal' => 'integer'
     ];
 
+
     public function item()
     {
         return $this->belongsTo(Item::class);
     }
 
-    
+   
 }

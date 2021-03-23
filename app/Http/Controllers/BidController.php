@@ -9,6 +9,8 @@ use App\Transformers\BidTransformer;
 use App\Http\Requests\BidRequest;
 use Exception;
 use Illuminate\Validation\ValidationException;
+use App\Extensions\Bid as BidService;
+use DB;
 
 class BidController extends Controller
 {
@@ -35,15 +37,23 @@ class BidController extends Controller
         if ($authUsername == $item->highest_bidder_username) {
             throw ValidationException::withMessages(['username' => 'You already the highest bidder.']);
         }
-
         if ($item->expiry_at->lt(now())) {
             throw ValidationException::withMessages(['created_at' => 'Bid was closed.']);
         }
+
+        DB::beginTransaction();
 
         $bid = $item->bids()->create([
             'nominal'   => $request->get('nominal'),
             'username'  => $authUsername
         ]);
+
+
+        // $bid = BidService::create(
+        //     $authUsername,
+        //     $item,
+        //     $request->get('nominal')
+        // );
 
         $isAuto = $request->boolean('auto');
 
@@ -53,6 +63,8 @@ class BidController extends Controller
                 'auto_bid' => $isAuto
             ]);
         }
+
+        DB::commit();
 
         return response()->json(
             fractal($bid, new BidTransformer())->toArray()
