@@ -5,18 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transformers\TokenTransformer;
 use App\Extensions\JwtToken;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Auth\AuthenticationException;
 
 class AuthenticationController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', [
-            'except' => ['login']
-        ]);
-    }
-
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $username = $request->get('username');
         $password = $request->get('password');
@@ -27,6 +22,11 @@ class AuthenticationController extends Controller
             'username'  => $username,
             'password'  => $password
         ]);
+
+        if (empty($token) || is_null($token)) {
+            throw new AuthenticationException('User not found, or your combination is wrong.');
+            
+        }
 
         $token = new JwtToken($token);
 

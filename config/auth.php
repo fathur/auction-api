@@ -124,10 +124,12 @@ return [
     'hard_code_users' => [
         [
             'username'  => 'user1',
-            'password'  => 'password1'
+            'password'  => 'password1',
+            'full_name' => 'User 1'
         ], [
             'username'  => 'user2',
-            'password'  => 'password2'
+            'password'  => 'password2',
+            'full_name' => 'User 2'
         ]
     ]
 

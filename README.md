@@ -10,6 +10,7 @@ Edit file `.env` then configure database to match with your system.
 
 ```
 $ composer install
+$ php artisan jwt:secret
 $ php artisan migrate
 $ php artisan db:seed
 $ php artisan serve

@@ -19,4 +19,9 @@ class Item extends Model
     {
         return $this->hasMany(Bid::class);
     }
+
+    public function itemUsers()
+    {
+        return $this->hasMany(ItemUser::class);
+    }
 }

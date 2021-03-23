@@ -32,7 +32,7 @@ class ItemFactory extends Factory
         return [
             'name'  => $productName,
             'description'  => $this->faker->paragraph(5),
-            'expiry_at'  => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'expiry_at'  => $this->faker->dateTimeBetween('-6 hours', '+1 month'),
             'image_url'  => $this->faker->imageUrl(360, 360, 'animals', true, 'cats', true),
             'initial_price'  => $initialPrice,
             'highest_bidder_username'  => $this->faker->randomElement(

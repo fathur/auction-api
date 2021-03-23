@@ -21,4 +21,6 @@ class Bid extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    
 }

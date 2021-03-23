@@ -37,13 +37,22 @@ class BidController extends Controller
         }
 
         if ($item->expiry_at->lt(now())) {
-            throw ValidationException::withMessages(['created_at' => 'Your bid is expired.']);
+            throw ValidationException::withMessages(['created_at' => 'Bid was closed.']);
         }
 
         $bid = $item->bids()->create([
             'nominal'   => $request->get('nominal'),
             'username'  => $authUsername
         ]);
+
+        $isAuto = $request->boolean('auto');
+
+        if ($isAuto) {
+            $item->itemUsers()->create([
+                'username' => $authUsername,
+                'auto_bid' => $isAuto
+            ]);
+        }
 
         return response()->json(
             fractal($bid, new BidTransformer())->toArray()
